@@ -2,8 +2,6 @@
 #include <fstream>
 #include <vector>
 #include <map>
-#include <string>
-#include <utility>
 
 using namespace std;
 ifstream fin("..\\NFA.in");
@@ -81,7 +79,6 @@ bool isAccepted(string word) {
 
 int main() {
     readData();
-
     for (int i = 0; i < nrWords; i++) {
         if (isAccepted(words[i])) {
             fout << "acceptat\n";
