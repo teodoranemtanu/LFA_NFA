@@ -78,7 +78,7 @@ bool isAccepted(string word) {
 }
 
 int main() {
-    readData();
+    readData()
     for (int i = 0; i < nrWords; i++) {
         if (isAccepted(words[i])) {
             fout << "acceptat\n";
