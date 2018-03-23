@@ -8,17 +8,22 @@ ifstream fin("..\\NFA.in");
 ofstream fout("..\\NFA.out");
 
 
-map<pair<int, char>, vector<int> > M; // automatul
-//pt perechea (q, c): q -> stare curenta; c -> caracterul cu care pot pleca din acea stare;
-// m[(q1,c)] = (q2, q3, q4 ....)  -> din starea q1 pot pleca cu caracterul c in starile q2, q3, ....
+map<pair<int, char>, vector<int> > M; // the NFA
+//pt perechea (q, c): q -> stare curenta; c -> the character which i can move forward from the state q
+// m[(q1,c)] = (q2, q3, q4 ....)  -> from the state q1 I can move with the character c to the states q2, q3 ...
 map<int, bool> finalStates;
-// finalStates[q] = true; -> x e o stare finala
+// finalStates[q] = true; -> x is a final state
 int initalState;
 int nrStates, nrFinalStates, nrTransitions;
 int nrWords;
-vector<string> words; // cuvintele pe care le testez
+vector<string> words; // the words which will be tested
 
 
+
+/**
+ * the function reads the data from file and builds the map and the vector of words,
+ * which are going to be tested
+ */
 void readData() {
     fin >> nrStates >> nrTransitions >> initalState >> nrFinalStates;
     for (int i = 0; i < nrFinalStates; i++) {
@@ -43,8 +48,14 @@ void readData() {
     }
 }
 
+/**
+ *
+ * @param word  represent a string, the tested word
+ * @return - true if the word is accepted, false otherwhise
+ */
+
 bool isAccepted(string word) {
-    if (word.size() == 0 && !finalStates[initalState]) { // testul pentru cuvantul vid
+    if (word.size() == 0 && !finalStates[initalState]) { // test for the void word
         return false;
     }
 
@@ -52,24 +63,25 @@ bool isAccepted(string word) {
     vector<int> currentStates;
     vector<int> nextStates;
 
-    currentStates.push_back(initalState); // initial pot incepe doar din starea initiala
+    currentStates.push_back(initalState); // initially only the initialState can be counted as current state
 
     for (int i = 0; i < word.size(); i++) {
         p.second = word[i];
         for (int j = 0; j < currentStates.size(); j++) {
-            // pentru o litera curenta, ma deplasez in functie de starile curente incerc sa le gasesc pe cele viitoare
+            // for a current letter, I move takimg into account the current states and I try to find the next ones
             p.first = currentStates[j];
-            nextStates.insert(nextStates.end(), M[p].begin(), M[p].end()); //starile viitoare sunt salvate in lista de adiacenta corespunzatoare perechii p curente,
-            // pe care o concatenez la vectorul de stari urmatoare
+            nextStates.insert(nextStates.end(), M[p].begin(),
+                              M[p].end()); //the next states are saved into a list corresponding to the current pair p
+            //which I concatenate to the vector of next states
             if (nextStates.empty()) return false;
-            //daca pentru o anumita litera nu am stari din care sa ma deplasez mai departe, atunci nu accept cuvantul
+            // if for a certain letter I don't have any next states, then I don't accept the word
         }
         currentStates = nextStates;
         nextStates.clear();
     }
 
     for (int i = 0; i < currentStates.size(); i++)
-        if (finalStates[currentStates[i]]) { // accept cuvantul doar daca vreo stare din cele gasite ca fiind valide e si finala
+        if (finalStates[currentStates[i]]) { //I accept the word only if one of the states found as valid is also final
             currentStates.clear();
             return true;
         }
