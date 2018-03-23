@@ -9,7 +9,8 @@ ofstream fout("..\\NFA.out");
 
 
 map<pair<int, char>, vector<int> > M; // the NFA
-//pt perechea (q, c): q -> stare curenta; c -> the character which i can move forward from the state q
+//pt perechea (q, c): q -> current state
+// c -> the character which i can move forward from the state q
 // m[(q1,c)] = (q2, q3, q4 ....)  -> from the state q1 I can move with the character c to the states q2, q3 ...
 map<int, bool> finalStates;
 // finalStates[q] = true; -> x is a final state
@@ -17,7 +18,6 @@ int initalState;
 int nrStates, nrFinalStates, nrTransitions;
 int nrWords;
 vector<string> words; // the words which will be tested
-
 
 
 /**
@@ -49,7 +49,7 @@ void readData() {
 }
 
 /**
- *
+ * tests if a word is going to be accepted by the NFA
  * @param word  represent a string, the tested word
  * @return - true if the word is accepted, false otherwhise
  */
